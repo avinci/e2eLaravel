@@ -15,7 +15,7 @@ resource "aws_launch_configuration" "ecs_launch_configuration" {
   }
 
   security_groups = [
-    "${aws_subnet.vpc_public_sn.id}"]
+    "${aws_security_group.vpc_public_sg.id}"]
   associate_public_ip_address = "true"
   key_name = "${var.ecs_key_pair_name}"
   user_data = <<-EOF
