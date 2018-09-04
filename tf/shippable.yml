@@ -65,12 +65,16 @@ jobs:
             - terraform apply -auto-approve -var-file=terraform.tfvars
       - OUT: infra_info
         overwrite: true
+      - OUT: ecs_cluster
+        overwrite: true
       - OUT: tf_state
     on_success:
       script:
-        - shipctl put_resource_state_multi infra_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_1_id=$(terraform output vpc_public_sn_1_id)" "vpc_public_sn_2_id=$(terraform output vpc_public_sn_2_id)"
+        - shipctl put_resource_state_multi infra_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)"
+        - shipctl put_resource_state_multi infra_info "vpc_public_sn_1_id=$(terraform output vpc_public_sn_1_id)" "vpc_public_sn_2_id=$(terraform output vpc_public_sn_2_id)" "ecs_cluster=$ecs_cluster"
         - shipctl put_resource_state_multi infra_info "rds_engine=$(terraform output engine)" "rds_engine_version=$(terraform output engine_version)" "rds_endpoint=$(terraform output endpoint)"
         - shipctl put_resource_state_multi infra_info "rds_port=$(terraform output port)" "rds_db_name=$(terraform output db_name)" "rds_db_user=$(terraform output db_user)"
+        - shipctl put_resource_state_multi ecs_cluster "sourceName=$ecs_cluster" "region=$region"
     always:
       script:
         - shipctl copy_file_to_resource_state terraform.tfstate tf_state

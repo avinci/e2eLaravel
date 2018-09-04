@@ -25,6 +25,32 @@ resources:
       sourceName: "412520076220.dkr.ecr.us-east-1.amazonaws.com/lara"
       versionName: "latest"
 
+- name: app_params
+    type: params
+    version:
+      params:
+        PORT: 80
+        ENVIRONMENT: "dev"
+
+  - name: app_docker_opts
+    type: dockerOptions
+    versionTemplate:
+      memory: 100
+      portMappings:
+        - 80:8080
+
+  - name: app_replicas
+    type: replicas
+    version:
+      count: 1
+
+  - name: ecs_cluster
+    type: cluster
+    integration: demo_aws
+    pointer:
+      sourceName : "tbd"
+      region: "tbd"
+
 jobs:
   - name: e2eLaravel_runCI
     type: runCI
@@ -34,25 +60,18 @@ jobs:
             - pwd
       - OUT: lara_img
 
-  - name: deploy_lara
-    type: runSh
-    integrations:
-      - demo_aws
+  - name: app_manifest
+    type: manifest
     steps:
-      - IN: lara_img
-      - IN: infra_info
-        switch: off
-      - TASK:
-          script:
-           - |
-               aws_access_key_id=$(shipctl get_integration_field demo_aws "accessKey")
-               aws_secret_access_key=$(shipctl get_integration_field demo_aws "secretKey")
-               aws configure set aws_access_key_id "$aws_access_key_id"
-               aws configure set aws_secret_access_key "$aws_secret_access_key"
-               aws configure set region "$region"
-           - aws ecs list-clusters
-#        - script: shippable_replace ${DEPLOYECSUNMANAGEDREPO_STATE}/taskDefinitions/sampleTaskDef.json
-#        - script: aws ecs register-task-definition --cli-input-json file://${DEPLOYECSUNMANAGEDREPO_STATE}/taskDefinitions/sampleTaskDef.json > output.json
-#        - script: REVISION=$(cat output.json | jq '.taskDefinition.revision')
-#        - script: echo "revision is $REVISION"
-#        - script: aws ecs update-service --cluster deploy-ecs-basic --service ${JOB_NAME} --task-definition shippable:${REVISION} --desired-count 1
+     - IN: app_replicas
+     - IN: app_docker_opts
+     - IN: app_params
+     - IN: lara_img
+
+  - name: app_deploy
+    type: deploy
+    steps:
+      - IN: app_manifest
+      - IN: ecs_cluster
+      - TASK: managed
+        deployMethod: replace
