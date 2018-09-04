@@ -39,21 +39,18 @@ jobs:
                 - vpc_public_subnet_1_cidr: "10.10.10.0/24"
           script:
             - pushd $(shipctl get_resource_state "code_repo")
-            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_field demo_aws "accessKey")
-            - echo $AWS_ACCESS_KEY_ID
-#            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_vpc_tf_creds "secretKey")
-#            - shipctl copy_file_from_resource_state aws_vpc_tf_state terraform.tfstate .
-#            - shipctl replace terraform.tfvars
-#            - terraform init
-#            - terraform apply -auto-approve -var-file=terraform.tfvars
+            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_field "demo_aws" "accessKey")
+            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_field "demo_aws" "secretKey")
+            - shipctl copy_file_from_resource_state "tf_state" "terraform.tfstate" "."
+            - shipctl replace "terraform.tfvars"
+            - terraform init
+            - terraform apply -auto-approve -var-file=terraform.tfvars
       - OUT: vpc_info
         overwrite: true
       - OUT: tf_state
-#    on_success:
-#      script:
-#        - shipctl put_resource_state_multi aws_vpc_tf_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "vpc_region=$vpc_region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
-#    always:
-#      script:
-#        - shipctl copy_file_to_resource_state terraform.tfstate aws_vpc_tf_state
-#        - popd
-
+    on_success:
+      script:
+        - shipctl put_resource_state_multi vpc_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "vpc_region=$vpc_region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
+    always:
+      script:
+        - shipctl copy_file_to_resource_state terraform.tfstate tf_state
