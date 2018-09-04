@@ -4,3 +4,4 @@ COPY ./lara/* /home/app/lara/
 #RUN composer global require "laravel/installer"
 #RUN export PATH=~/.composer/vendor/bin:$PATH && laravel new blog
 EXPOSE 8080
+

@@ -6,3 +6,23 @@ php:
 build:
   ci:
     - docker build -t lara:latest .
+  on_success:
+    - shipctl put_resource_state_multi lara_img "versionName=latest buildNumber=$BUILD_NUMBER"
+
+resources:
+  # app service image
+  - name: lara_img
+    type: image
+    integration: "demo_aws"
+    versionTemplate:
+      sourceName: "412520076220.dkr.ecr.us-east-1.amazonaws.com/lara"
+      versionName: "latest"
+
+jobs:
+  - name: e2eLaravel_runCI
+    type: runCI
+    steps:
+      - TASK:
+          script:
+            - pwd
+      - OUT: lara_img
