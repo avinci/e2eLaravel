@@ -3,9 +3,16 @@ language: php
 php:
   - "7.1"
 
+integrations:
+  hub:
+    - integrationName: demo_aws
+      region: us-east-1
+      type: ecr
+
 build:
   ci:
-    - docker build -t lara:latest .
+    - docker build -t 412520076220.dkr.ecr.us-east-1.amazonaws.com/lara:latest .
+    - docker push 412520076220.dkr.ecr.us-east-1.amazonaws.com/lara:latest
   on_success:
     - shipctl put_resource_state_multi lara_img "versionName=latest buildNumber=$BUILD_NUMBER"
 
