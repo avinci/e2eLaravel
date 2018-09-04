@@ -7,11 +7,6 @@ resources:
       sourceName: "avinci/e2eLaravel"
       branch: master
 
-# AWS credentials
-  - name: aws_creds
-    type: integration
-    integration: "drship_aws"
-
 # Terraform State
   - name: tf_state
     type: state
