@@ -15,7 +15,7 @@ variable "availability_zone" {
   }
 }
 
-########################### demo VPC Config ##################################
+########################### VPC Config ##################################
 
 variable "vpc_name" {
   description = "VPC for building demos"
@@ -35,4 +35,30 @@ variable "vpc_public_subnet_1_cidr" {
 
 variable "vpc_access_from_ip_range" {
   description = "Access can be made from the following IPs"
+}
+
+########################### ECS Config ##################################
+
+variable "ecs_cluster" {
+  description = "ECS cluster name"
+}
+
+variable "max_instance_size" {
+  description = "Maximum number of instances in the cluster"
+}
+
+variable "min_instance_size" {
+  description = "Minimum number of instances in the cluster"
+}
+
+variable "desired_capacity" {
+  description = "Desired number of instances in the cluster"
+}
+
+variable "ecs_ami_id" {
+  description = "Desired number of instances in the cluster"
+}
+
+variable "ecs_instance_type" {
+  description = "Desired number of instances in the cluster"
 }
