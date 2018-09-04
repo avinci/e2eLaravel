@@ -25,7 +25,7 @@ resources:
       sourceName: "412520076220.dkr.ecr.us-east-1.amazonaws.com/lara"
       versionName: "latest"
 
-- name: app_params
+  - name: app_params
     type: params
     version:
       params:
