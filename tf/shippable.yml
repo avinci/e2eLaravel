@@ -41,7 +41,7 @@ jobs:
             - pushd $(shipctl get_resource_state "code_repo")
             - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_field "demo_aws" "accessKey")
             - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_field "demo_aws" "secretKey")
-            - shipctl copy_file_from_resource_state "tf_state" "terraform.tfstate" "."
+            - shipctl copy_file_from_resource_state "tf_state" terraform.tfstate .
             - shipctl replace "terraform.tfvars"
             - terraform init
             - terraform apply -auto-approve -var-file=terraform.tfvars
