@@ -53,7 +53,7 @@ jobs:
                 - ecs_instance_type: "t2.micro"
                 - ecs_ami_id: "ami-fad25980"
                 - postgres_db_name: "test_db"
-                - postgres_db_username: "admin"
+                - postgres_db_username: "lara_admin"
                 - postgres_db_password: "password!@#"
           script:
             - pushd $(shipctl get_resource_state "code_repo")/tf
