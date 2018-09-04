@@ -38,7 +38,7 @@ jobs:
                 - vpc_access_from_ip_range: "0.0.0.0/0"
                 - vpc_public_subnet_1_cidr: "10.10.10.0/24"
                 - ecs_cluster: "cluster"
-                - ecs_key_pair_name: "dr_us_east_1"
+                - ecs_key_pair_name: "demo-key"
                 - max_instance_size: 3
                 - min_instance_size: 1
                 - desired_capacity: 2
