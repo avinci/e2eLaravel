@@ -2,7 +2,7 @@
 provider "aws" {
   access_key = "${var.aws_access_key_id}"
   secret_key = "${var.aws_secret_access_key}"
-  region = "${var.vpc_region}"
+  region = "${var.region}"
 }
 
 # Define a vpc
@@ -25,7 +25,7 @@ resource "aws_internet_gateway" "demo_ig" {
 resource "aws_subnet" "vpc_public_sn" {
   vpc_id = "${aws_vpc.vpc_name.id}"
   cidr_block = "${var.vpc_public_subnet_1_cidr}"
-  availability_zone = "${lookup(var.availability_zone, var.vpc_region)}"
+  availability_zone = "${lookup(var.availability_zone, var.region)}"
   tags {
     Name = "vpc_public_sn"
   }
@@ -84,8 +84,8 @@ resource "aws_security_group" "vpc_public_sg" {
   }
 }
 
-output "vpc_region" {
-  value = "${var.vpc_region}"
+output "region" {
+  value = "${var.region}"
 }
 
 output "vpc_id" {

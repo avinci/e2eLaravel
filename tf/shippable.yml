@@ -32,15 +32,22 @@ jobs:
           runtime:
             options:
               env:
-                - vpc_region: "us-east-1"
+                - region: "us-east-1"
                 - vpc_name: "lara_vpc"
                 - vpc_cidr_block: "10.10.0.0/16"
                 - vpc_access_from_ip_range: "0.0.0.0/0"
                 - vpc_public_subnet_1_cidr: "10.10.10.0/24"
+                - ecs_cluster: "cluster"
+                - ecs_key_pair_name: "dr_us_east_1"
+                - max_instance_size: 3
+                - min_instance_size: 1
+                - desired_capacity: 2
+                - ecs_instance_type: "t2.micro"
+                - ecs_ami_id: "ami-fad25980"
           script:
             - pushd $(shipctl get_resource_state "code_repo")/tf
-            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_field "demo_aws" "accessKey")
-            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_field "demo_aws" "secretKey")
+            - export aws_access_key_id=$(shipctl get_integration_field "demo_aws" "accessKey")
+            - export aws_secret_access_key=$(shipctl get_integration_field "demo_aws" "secretKey")
             - shipctl copy_file_from_resource_state "tf_state" terraform.tfstate . || true
             - shipctl replace "terraform.tfvars"
             - terraform init
@@ -51,7 +58,7 @@ jobs:
       - OUT: tf_state
     on_success:
       script:
-        - shipctl put_resource_state_multi vpc_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "vpc_region=$vpc_region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
+        - shipctl put_resource_state_multi vpc_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
     always:
       script:
         - shipctl copy_file_to_resource_state terraform.tfstate tf_state

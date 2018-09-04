@@ -21,7 +21,7 @@ variable "vpc_name" {
   description = "VPC for building demos"
 }
 
-variable "vpc_region" {
+variable "region" {
   description = "AWS region"
 }
 
