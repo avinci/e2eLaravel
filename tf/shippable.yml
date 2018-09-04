@@ -25,11 +25,6 @@ resources:
       params:
         SEED: "initial_version"
 
-# AWS RDS Postgres settings like db name, username, password
-  - name: aws_rds_postgres_tf_settings
-    type: integration
-    integration: "drship_aws_rds_postgres_settings"
-
 jobs:
 # Provision AWS VPC with Terraform
   - name: prov_vpc
