@@ -74,4 +74,3 @@ jobs:
       - IN: app_manifest
       - IN: ecs_cluster
       - TASK: managed
-        deployMethod: replace
