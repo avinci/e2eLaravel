@@ -44,6 +44,7 @@ jobs:
                 - vpc_cidr_block: "10.10.0.0/16"
                 - vpc_access_from_ip_range: "0.0.0.0/0"
                 - vpc_public_subnet_1_cidr: "10.10.10.0/24"
+                - vpc_public_subnet_2_cidr: "10.10.20.0/24"
                 - ecs_cluster: "cluster"
                 - ecs_key_pair_name: "demo-key"
                 - max_instance_size: 3
@@ -67,7 +68,7 @@ jobs:
       - OUT: tf_state
     on_success:
       script:
-        - shipctl put_resource_state_multi infra_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
+        - shipctl put_resource_state_multi infra_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_1_id=$(terraform output vpc_public_sn_1_id)" "vpc_public_sn_2_id=$(terraform output vpc_public_sn_2_id)"
         - shipctl put_resource_state_multi infra_info "rds_engine=$(terraform output engine)" "rds_engine_version=$(terraform output engine_version)" "rds_endpoint=$(terraform output endpoint)"
         - shipctl put_resource_state_multi infra_info "rds_port=$(terraform output port)" "rds_db_name=$(terraform output db_name)" "rds_db_user=$(terraform output db_user)"
     always:
