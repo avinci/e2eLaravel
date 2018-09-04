@@ -54,7 +54,7 @@ jobs:
                 - ecs_ami_id: "ami-fad25980"
                 - postgres_db_name: "test_db"
                 - postgres_db_username: "lara_admin"
-                - postgres_db_password: "password!@#"
+                - postgres_db_password: "password"
           script:
             - pushd $(shipctl get_resource_state "code_repo")/tf
             - export aws_access_key_id=$(shipctl get_integration_field "demo_aws" "accessKey")
