@@ -12,3 +12,6 @@ min_instance_size = ${min_instance_size}
 desired_capacity = ${desired_capacity}
 ecs_ami_id = "${ecs_ami_id}"
 ecs_instance_type = "${ecs_instance_type}"
+postgres_db_name="${postgres_db_name}"
+postgres_db_username="${postgres_db_username}"
+postgres_db_password="${postgres_db_password}"

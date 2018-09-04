@@ -12,11 +12,23 @@ resources:
     type: state
 
 # Output of VPC provisioning
-  - name: vpc_info
+  - name: infra_info
     type: params
     versionTemplate:
       params:
         SEED: "initial_version"
+
+# Output of Amazon RDS Postgres provisioning
+  - name: rds_pg_info
+    type: params
+    versionTemplate:
+      params:
+        SEED: "initial_version"
+
+# AWS RDS Postgres settings like db name, username, password
+  - name: aws_rds_postgres_tf_settings
+    type: integration
+    integration: "drship_aws_rds_postgres_settings"
 
 jobs:
 # Provision AWS VPC with Terraform
@@ -44,6 +56,9 @@ jobs:
                 - desired_capacity: 2
                 - ecs_instance_type: "t2.micro"
                 - ecs_ami_id: "ami-fad25980"
+                - postgres_db_name: "test_db"
+                - postgres_db_username: "admin"
+                - postgres_db_password: "password!@#"
           script:
             - pushd $(shipctl get_resource_state "code_repo")/tf
             - export aws_access_key_id=$(shipctl get_integration_field "demo_aws" "accessKey")
@@ -52,12 +67,14 @@ jobs:
             - shipctl replace "terraform.tfvars"
             - terraform init
             - terraform apply -auto-approve -var-file=terraform.tfvars
-      - OUT: vpc_info
+      - OUT: infra_info
         overwrite: true
       - OUT: tf_state
     on_success:
       script:
-        - shipctl put_resource_state_multi vpc_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
+        - shipctl put_resource_state_multi infra_info "versionName=$vpc_name" "vpc_id=$(terraform output vpc_id)" "region=$region" "vpc_public_sg_id=$(terraform output vpc_public_sg_id)" "vpc_public_sn_id=$(terraform output vpc_public_sn_id)"
+        - shipctl put_resource_state_multi infra_info "rds_engine=$(terraform output engine)" "rds_engine_version=$(terraform output engine_version)" "rds_endpoint=$(terraform output endpoint)"
+        - shipctl put_resource_state_multi infra_info "rds_port=$(terraform output port)" "rds_db_name=$(terraform output db_name)" "rds_db_user=$(terraform output db_user)"
     always:
       script:
         - shipctl copy_file_to_resource_state terraform.tfstate tf_state

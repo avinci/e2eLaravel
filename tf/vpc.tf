@@ -14,10 +14,10 @@ resource "aws_vpc" "vpc_name" {
 }
 
 # Internet gateway for the public subnet
-resource "aws_internet_gateway" "demo_ig" {
+resource "aws_internet_gateway" "ig" {
   vpc_id = "${aws_vpc.vpc_name.id}"
   tags {
-    Name = "demo_ig"
+    Name = "ig"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_route_table" "vpc_public_sn_rt" {
   vpc_id = "${aws_vpc.vpc_name.id}"
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.demo_ig.id}"
+    gateway_id = "${aws_internet_gateway.ig.id}"
   }
   tags {
     Name = "vpc_public_sn_rt"
@@ -51,8 +51,8 @@ resource "aws_route_table_association" "vpc_public_sn_rt_assn" {
 
 # ECS Instance Security group
 resource "aws_security_group" "vpc_public_sg" {
-  name = "demo_pubic_sg"
-  description = "demo public access security group"
+  name = "pubic_sg"
+  description = "public access security group"
   vpc_id = "${aws_vpc.vpc_name.id}"
 
   ingress {
@@ -80,7 +80,7 @@ resource "aws_security_group" "vpc_public_sg" {
       "0.0.0.0/0"]
   }
   tags {
-    Name = "demo_pubic_sg"
+    Name = "pubic_sg"
   }
 }
 

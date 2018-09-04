@@ -8,7 +8,7 @@ variable "aws_secret_access_key" {
 }
 
 variable "availability_zone" {
-  description = "availability zone used for the demo, based on region"
+  description = "availability zone, based on region"
   default = {
     us-east-1 = "us-east-1a"
     us-west-1 = "us-west-1a"
@@ -18,7 +18,7 @@ variable "availability_zone" {
 ########################### VPC Config ##################################
 
 variable "vpc_name" {
-  description = "VPC for building demos"
+  description = "VPC"
 }
 
 variable "region" {
@@ -26,7 +26,7 @@ variable "region" {
 }
 
 variable "vpc_cidr_block" {
-  description = "Uber IP addressing for demo Network"
+  description = "Uber IP addressing for Network"
 }
 
 variable "vpc_public_subnet_1_cidr" {
@@ -65,4 +65,18 @@ variable "ecs_instance_type" {
 
 variable "ecs_key_pair_name" {
   description = "ECS key pair name"
+}
+
+########################### RDS Config ##################################
+
+variable "postgres_db_name" {
+  description = "Postgres Database Name"
+}
+
+variable "postgres_db_username" {
+  description = "Postgres Database Username"
+}
+
+variable "postgres_db_password" {
+  description = "Postgres Database Password"
 }
