@@ -1,0 +1,10 @@
+{
+  "cluster": "${cluster_name}",
+  "serviceName": "${service_name}",
+  "taskDefinition": "",
+  "desiredCount": "${desired_count}",
+  "deploymentConfiguration": {
+    "maximumPercent": 0,
+    "minimumHealthyPercent": 0
+  }
+}

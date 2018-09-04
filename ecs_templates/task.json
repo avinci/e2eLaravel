@@ -1,0 +1,23 @@
+{
+  "family": "lara",
+  "containerDefinitions": [
+    {
+      "name": "lara",
+      "image": "${image_name}:${image_name_tag}",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 80
+        }
+      ],
+      "memory": 100,
+      "essential": true,
+      "environment": [
+        {
+          "name": "ENVIRONMENT",
+          "value": "dev"
+        }
+      ]
+    }
+  ]
+}
