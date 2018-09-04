@@ -44,6 +44,7 @@ jobs:
             - shipctl copy_file_from_resource_state "tf_state" terraform.tfstate . || true
             - shipctl replace "terraform.tfvars"
             - terraform init
+            - ls -al
             - terraform apply -auto-approve -var-file=terraform.tfvars
       - OUT: vpc_info
         overwrite: true
