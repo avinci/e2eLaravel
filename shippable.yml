@@ -5,8 +5,4 @@ php:
 
 build:
   ci:
-    - cd lara
-    - composer global require "laravel/installer"
-    - export PATH=~/.composer/vendor/bin:$PATH
-    - laravel new blog
-    - php artisan serve
+    - docker build -t lara:latest .
