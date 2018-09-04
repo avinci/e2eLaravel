@@ -62,3 +62,7 @@ variable "ecs_ami_id" {
 variable "ecs_instance_type" {
   description = "Desired number of instances in the cluster"
 }
+
+variable "ecs_key_pair_name" {
+  description = "ECS key pair name"
+}
