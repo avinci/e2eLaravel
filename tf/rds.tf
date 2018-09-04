@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "pg_subnet_group" {
-  name = "pg_subnet_group"
+  name = "pg_subnet_group_1"
   subnet_ids = [
     "${aws_subnet.vpc_public_sn_1.id}", "${aws_subnet.vpc_public_sn_2.id}"]
 }
